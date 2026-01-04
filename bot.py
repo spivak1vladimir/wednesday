@@ -78,6 +78,28 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text,
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
+# ---------------- ЗАПУСК ----------------
+
+def main():
+    app = Application.builder().token(TOKEN).build()
+
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("info", info))
+    app.add_handler(CommandHandler("admin", admin))
+
+    # обработчики кнопок
+    app.add_handler(CallbackQueryHandler(register, pattern="^agree$"))
+    app.add_handler(CallbackQueryHandler(cancel_registration, pattern="^cancel$"))
+    app.add_handler(CallbackQueryHandler(admin_actions, pattern="^del_"))
+
+    # ✅ Добавляем обработчик для кнопки "Информация о забеге"
+    app.add_handler(CallbackQueryHandler(info, pattern="^info$"))
+
+    reminder_time = RUN_DATETIME - timedelta(hours=24)
+    app.job_queue.run_once(send_reminder, reminder_time)
+
+    logger.info("Бот запущен")
+    app.run_polling()
 
 
 # ---------------- РЕГИСТРАЦИЯ ----------------
