@@ -70,10 +70,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     keyboard = [
-        [InlineKeyboardButton("Согласен, зарегистрироваться (8 км)", callback_data="agree")]
+        [InlineKeyboardButton("Согласен, зарегистрироваться (8 км)", callback_data="agree")],
+        [InlineKeyboardButton("Информация о забеге", callback_data="info")]
     ]
 
-    await update.message.reply_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
+    await update.message.reply_text(
+        text,
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
+
 
 # ---------------- РЕГИСТРАЦИЯ ----------------
 
